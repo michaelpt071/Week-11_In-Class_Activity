@@ -123,6 +123,7 @@ cases |>
 #use forcats to order month_year by the posix
 ```
 
+Online resource used: https://stackoverflow.com/questions/30018187/changing-tick-intervals-when-x-axis-values-are-dates
 
 #### Canvas Quiz Question 1
 
