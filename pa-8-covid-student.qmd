@@ -179,4 +179,38 @@ cases |>
 
 ### Create your own graph
 
-Using the COVID-19 data, create your graph to answer you own research question. You will submit that graph as png file in your Canvas quiz. Include your research question as the subtitle of the graph.  
+Using the COVID-19 data, create your graph to answer you own research question. You will submit that graph as png file in your Canvas quiz. Include your research question as the subtitle of the graph.
+
+
+```{r}
+cases |> 
+  filter(state %in% c("California",
+                      "Oregon",
+                      "Washington")) %>% 
+  mutate(date = date(date),
+         month = month(date, 
+                       label = TRUE,
+                       abbr = TRUE),
+         year = year(date)) |> 
+  unite("month_year", 
+        month:year,
+        sep = " ") |> 
+  mutate(month_year_posix = my(month_year)) |> 
+  group_by(state, 
+           month_year_posix) |> 
+  summarise(monthly_cases = sum(cases_daily)) |> 
+  mutate(monthly_cases_mil = monthly_cases/1000000) |> 
+  ggplot(aes(x = month_year_posix,
+             y = monthly_cases_mil,
+             color = state)) +
+  geom_line() +
+  theme_light() +
+  scale_x_date(date_breaks = "months",
+               date_labels = "%b %y") +
+  theme(axis.text.x = element_text(angle = 90,
+                                   vjust = 0.5,
+                                   hjust = 1)) +
+  labs(x = "Month and Year",
+       y = "Total Cases Per Month (in Millions)") 
+```
+
