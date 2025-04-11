@@ -97,11 +97,25 @@ Below is some code that can help you get started with the process of working wit
 ```{r}
 #| label: calculate-totals-month
 cases |> 
-  filter(____________) |> 
-  mutate(date = ___(date),
-         month = ___(date, label = , abbr = ),
-         year = ___(date)) |> 
-  unite()
+  filter(state == "California") |> 
+  mutate(date = date(date),
+         month = month(date, label = TRUE, abbr = TRUE),
+         year = year(date)) |> 
+  unite("month_year", month:year, sep = " ") |> 
+  group_by(month_year) |> 
+  summarise(monthly_cases = sum(cases))
+  
+  
+  ggplot() +
+  geom_line(aes(x = month_year,
+                y = monthly_cases),
+            color = "red") +
+  labs(x = "Month and Year",
+       y = "Total Cases Per Month") +
+  theme_light()
+
+#scales package to set scale for the x-axis
+#use forcats to order month_year by the posix
 ```
 
 
@@ -109,7 +123,7 @@ cases |>
 
 **Which Month in California had the most COVID-19 cases between January 2020 and March 2023?**
 
->Insert Answer Here
+>January 2023 had the most cases (369587558). 
 
 
 <!-- Swap roles -- Developer becomes Coder, Coder becomes Developer! -->
