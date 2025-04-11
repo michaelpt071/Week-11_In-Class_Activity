@@ -1,6 +1,6 @@
 ---
 title: "PA 8: COVID-19 Infections and California"
-author: "Group Member Names HEre"
+author: "Michael Torrisi, Sam Minard"
 format: 
   html: default
   gfm: default
