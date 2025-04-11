@@ -213,4 +213,7 @@ cases |>
   labs(x = "Month and Year",
        y = "Total Cases Per Month (in Millions)") 
 ```
+```{r}
+ggsave("WestCoastMonthyCases.png",plot = last_plot(),scale = 1,width = 12,height = 8.5,units = c("in"))
+```
 
