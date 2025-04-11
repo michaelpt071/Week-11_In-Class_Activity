@@ -104,19 +104,20 @@ cases |>
   unite("month_year", month:year, sep = " ") |> 
   mutate(month_year_posix = my(month_year)) |> 
   group_by(month_year_posix) |> 
-  summarise(monthly_cases = sum(cases)) |> 
+  summarise(monthly_cases = sum(cases_daily)) |> 
+  mutate(monthly_cases_mil = monthly_cases/1000000) |> 
   ggplot() +
   geom_line(aes(x = month_year_posix,
-                y = monthly_cases),
+                y = monthly_cases_mil),
             color = "red") +
   theme_light() +
   scale_x_date(date_breaks = "months",
-               date_labels = "%b-%y") +
+               date_labels = "%b %y") +
   theme(axis.text.x = element_text(angle = 90,
                                    vjust = 0.5,
                                    hjust = 1)) +
   labs(x = "Month and Year",
-       y = "Total Cases Per Month") 
+       y = "Total Cases Per Month (in Millions)") 
 
 #scales package to set scale for the x-axis
 #use forcats to order month_year by the posix
