@@ -129,7 +129,7 @@ Online resource used: https://stackoverflow.com/questions/30018187/changing-tick
 
 **Which Month in California had the most COVID-19 cases between January 2020 and March 2023?**
 
->January 2023 had the most cases (369587558). 
+>January 2022 had the most new cases (~3 million). 
 
 
 <!-- Swap roles -- Developer becomes Coder, Coder becomes Developer! -->
@@ -142,7 +142,29 @@ Create a graph that maps the number of cases in California in 2021 only. Be sure
 
 ```{r}
 #| label: ca-2021-covid
-
+cases |> 
+  filter(state == "California") |> 
+  mutate(date = date(date),
+         month = month(date, label = TRUE, abbr = TRUE),
+         year = year(date)) |> 
+  filter(year == 2021) %>% 
+  unite("month_year", month:year, sep = " ") |> 
+  mutate(month_year_posix = my(month_year)) |> 
+  group_by(month_year_posix) |> 
+  summarise(monthly_cases = sum(cases_daily)) |> 
+  mutate(monthly_cases_mil = monthly_cases/1000000) |> 
+  ggplot() +
+  geom_line(aes(x = month_year_posix,
+                y = monthly_cases_mil),
+            color = "red") +
+  theme_light() +
+  scale_x_date(date_breaks = "months",
+               date_labels = "%b %y") +
+  theme(axis.text.x = element_text(angle = 90,
+                                   vjust = 0.5,
+                                   hjust = 1)) +
+  labs(x = "Month and Year",
+       y = "Total Cases Per Month (in Millions)") 
 ```
 
 
@@ -150,7 +172,7 @@ Create a graph that maps the number of cases in California in 2021 only. Be sure
 
 **Which month in 2021 had the fewest number of cases in California?**
 
->Insert Answer Here
+> June of 2021 had the fewest number of cases in California.
 
 <!-- Swap roles -- Developer becomes Coder, Coder becomes Developer! -->
 
